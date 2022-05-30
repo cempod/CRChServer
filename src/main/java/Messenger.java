@@ -30,7 +30,7 @@ if(messages.size()>100){
                 e.printStackTrace();
             }
         }
-        System.out.println("Активно клиентов: "+ this.clients.size());
+        System.out.println("Clients online: "+ this.clients.size());
     }
 
     public ArrayList<String> getMessages() {

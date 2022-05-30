@@ -44,6 +44,8 @@ this.messenger = messenger;
                         case ("sendMessage"): messenger.send(word);
                         break;
                         case ("getLastMessages"): sendLastMessages();
+                        break;
+                        case ("ping"):sendPong();
                     }
 
 
@@ -56,8 +58,20 @@ this.messenger = messenger;
 
                 }
             }
-        System.out.println("Клиент отвалился");
+        System.out.println("Client is offline");
         }
+
+    private void sendPong() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("requestType","pong");
+        try {
+            this.connectedClient.getOut().write(jsonObject.toString()+"\n");
+            this.connectedClient.getOut().flush();
+            System.out.println("Sending pong");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void sendLastMessages() {
         ArrayList<String> messages = messenger.getMessages();
@@ -77,7 +91,7 @@ this.messenger = messenger;
         try {
             this.connectedClient.getOut().write(jsonObject.toString()+"\n");
             this.connectedClient.getOut().flush();
-            System.out.println("Отправляем последние сообщения");
+            System.out.println("Sending last messages");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

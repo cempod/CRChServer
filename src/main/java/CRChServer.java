@@ -20,7 +20,7 @@ public class CRChServer {
         try {
             try {
                 server = new ServerSocket(4004); // серверсокет прослушивает порт 4004
-                System.out.println("Сервер запущен!"); // хорошо бы серверу
+                System.out.println("Server is online!"); // хорошо бы серверу
                 //   объявить о своем запуске
                 while (!server.isClosed()) {
                     clientSocket = server.accept(); // accept() будет ждать пока
@@ -28,14 +28,14 @@ public class CRChServer {
 
                     new ConnectionThread(client, messenger).start();
                     //кто-нибудь не захочет подключиться
-                    System.out.println("Подключен клиент");
+                    System.out.println("Client was connected");
                 }
 
 
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                System.out.println("Сервер закрыт!");
+                System.out.println("Server is closed!");
                 server.close();
             }
         } catch (IOException e) {
