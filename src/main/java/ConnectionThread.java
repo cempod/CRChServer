@@ -26,7 +26,7 @@ this.messenger = messenger;
             e.printStackTrace();
         }
 
-
+sendPing();
 
         while (connectedClient.getClientSocket().isConnected() ){
             String word = null;
@@ -44,8 +44,7 @@ this.messenger = messenger;
                         case ("sendMessage"): messenger.send(word);
                         break;
                         case ("getLastMessages"): sendLastMessages();
-                        break;
-                        case ("ping"):sendPong();
+
                     }
 
 
@@ -61,16 +60,33 @@ this.messenger = messenger;
         System.out.println("Client is offline");
         }
 
-    private void sendPong() {
+    private void sendPing() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("requestType","pong");
-        try {
-            this.connectedClient.getOut().write(jsonObject.toString()+"\n");
-            this.connectedClient.getOut().flush();
-            System.out.println("Sending pong");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        jsonObject.put("requestType","ping");
+        Runnable task = new Runnable() {
+            public void run() {
+                while(true){
+                    //System.out.println("Жду пингов");
+
+                    try {
+                        try {
+                            connectedClient.getOut().write(jsonObject.toString()+"\n");
+                            connectedClient.getOut().flush();
+                            //System.out.println("Sending pong");
+                            Thread.sleep(10000);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.start();
+
     }
 
     private void sendLastMessages() {
