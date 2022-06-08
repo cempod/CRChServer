@@ -43,7 +43,11 @@ sendPing();
                     switch (jsonObject.getString("requestType")){
                         case ("sendMessage"): messenger.send(word);
                         break;
-                        case ("getLastMessages"): sendLastMessages();
+                        case ("getLastMessages"): {
+                            sendLastMessages();
+                            sendOnlineAndSetName(word);
+                            break;
+                        }
 
                     }
 
@@ -59,6 +63,13 @@ sendPing();
             }
         System.out.println("Client is offline");
         }
+
+    private void sendOnlineAndSetName(String word) {
+        JSONObject jsonObject = new JSONObject(word);
+        String name = jsonObject.getString("name");
+       connectedClient.setUsername(name);
+       messenger.sendOnline(name);
+    }
 
     private void sendPing() {
         JSONObject jsonObject = new JSONObject();
@@ -80,6 +91,7 @@ sendPing();
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        messenger.sendOffline(connectedClient.getUsername());
                     }
                 }
             }
@@ -112,6 +124,5 @@ sendPing();
             throw new RuntimeException(e);
         }
     }
-
 
 }

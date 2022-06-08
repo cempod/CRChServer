@@ -1,3 +1,4 @@
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ if(messages.size()>100){
                 clients.get(i).getOut().write(message+ "\n");
                 clients.get(i).getOut().flush();
             } catch (IOException e) {
+                sendOffline(clients.get(i).getUsername());
                 clients.remove(i);
                 i--;
                 e.printStackTrace();
@@ -35,5 +37,40 @@ if(messages.size()>100){
 
     public ArrayList<String> getMessages() {
         return messages;
+    }
+
+
+
+    public void sendOnline(String name) {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("requestType","sendOnline");
+        jsonObject.put("userName",name);
+
+        for(int i = 0; i<clients.size();i++){
+            try {
+                clients.get(i).getOut().write(jsonObject+ "\n");
+                clients.get(i).getOut().flush();
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+        }
+    }
+    public void sendOffline(String name) {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("requestType","sendOffline");
+        jsonObject.put("userName",name);
+
+        for(int i = 0; i<clients.size();i++){
+            try {
+                clients.get(i).getOut().write(jsonObject+ "\n");
+                clients.get(i).getOut().flush();
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+        }
     }
 }
