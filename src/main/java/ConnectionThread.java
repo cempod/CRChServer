@@ -84,9 +84,11 @@ sendPing();
                             connectedClient.getOut().write(jsonObject.toString()+"\n");
                             connectedClient.getOut().flush();
                             //System.out.println("Sending pong");
-                            Thread.sleep(10000);
+                            Thread.sleep(4000);
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                           e.printStackTrace();
+                            messenger.sendOffline(connectedClient.getUsername());
+                            break;
                         }
 
                     } catch (InterruptedException e) {

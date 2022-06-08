@@ -26,7 +26,7 @@ if(messages.size()>100){
                 clients.get(i).getOut().write(message+ "\n");
                 clients.get(i).getOut().flush();
             } catch (IOException e) {
-                sendOffline(clients.get(i).getUsername());
+
                 clients.remove(i);
                 i--;
                 e.printStackTrace();
